@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correios - Checkout PIX</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Oficial dos Correios -->
+        <header class="correios-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="menu-btn" id="menuBtn">
+                        <div class="hamburger">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
+                    <button class="accessibility-btn" id="accessibilityBtn">
+                        Acessibilidade
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="header-right">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <span class="logo-text">Correios</span>
+                    </div>
+                </div>
+            </div>
+            <div class="yellow-bar"></div>
+        </header>
+
+        <main class="main-content">
+            <!-- Título da página -->
+            <div class="page-title">
+                <h1>Checkout Seguro</h1>
+                <p>Finalize seu pagamento via PIX</p>
+            </div>
+
+            <!-- Status do Pagamento -->
+            <div class="card status-card">
+                <div class="card-header">
+                    <h2>Status do Pedido</h2>
+                    <span class="status-badge" id="statusBadge">Aguardando pagamento</span>
+                </div>
+                <div class="card-content">
+                    <div class="timer-info">
+                        <i class="fas fa-clock"></i>
+                        <span id="timerText">Carregando...</span>
+                    </div>
+                    <div class="order-id" id="orderId" style="margin-top: 8px; font-size: 12px; color: #666;"></div>
+                </div>
+            </div>
+
+            <!-- Resumo do Pedido -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Resumo do Pedido</h2>
+                </div>
+                <div class="card-content">
+                    <div class="order-item">
+                        <span>Frete Expresso</span>
+                        <span>R$ 25,90</span>
+                    </div>
+                    <div class="order-item">
+                        <span>Taxa de processamento</span>
+                        <span>R$ 2,10</span>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="order-total">
+                        <span>Total</span>
+                        <span id="totalAmount">R$ 28,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading PIX -->
+            <div class="card loading-card" id="loadingCard">
+                <div class="card-content text-center">
+                    <div class="loading-spinner"></div>
+                    <h3>Gerando PIX...</h3>
+                    <p>Conectando com o gateway de pagamento</p>
+                </div>
+            </div>
+
+            <!-- PIX Payment -->
+            <div class="card pix-card hidden" id="pixCard">
+                <div class="card-header text-center">
+                    <h2>
+                        <i class="fas fa-qrcode"></i>
+                        Pagamento PIX
+                    </h2>
+                    <p>Escaneie o QR Code ou copie o código PIX</p>
+                </div>
+                <div class="card-content">
+                    <!-- QR Code -->
+                    <div class="qr-code-container">
+                        <div class="qr-code-image" id="qrCodeImage">
+                            <div class="qr-code-placeholder">
+                                <i class="fas fa-qrcode"></i>
+                                <p>QR Code PIX</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Código PIX -->
+                    <div class="pix-code-section">
+                        <label>Ou copie o código PIX:</label>
+                        <div class="pix-code-container">
+                            <div class="pix-code" id="pixCode">Carregando código PIX...</div>
+                            <button class="copy-btn" id="copyBtn">
+                                <i class="fas fa-copy" id="copyIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Instruções -->
+                    <div class="instructions">
+                        <p><strong>Como pagar:</strong></p>
+                        <ol>
+                            <li>Abra seu app de banco</li>
+                            <li>Escolha a opção PIX</li>
+                            <li>Escaneie o QR Code ou cole o código</li>
+                            <li>Confirme o pagamento</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status de Processamento -->
+            <div class="card processing-card hidden" id="processingCard">
+                <div class="card-content text-center">
+                    <div class="loading-spinner"></div>
+                    <h3>Processando pagamento...</h3>
+                    <p>Aguarde alguns instantes</p>
+                </div>
+            </div>
+
+            <!-- Pagamento Aprovado -->
+            <div class="card success-card hidden" id="successCard">
+                <div class="card-content text-center">
+                    <div class="success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h3>Pagamento Aprovado!</h3>
+                    <p>Seu pedido foi confirmado</p>
+                    <div class="tracking-info">
+                        <p><strong>Código de rastreamento:</strong></p>
+                        <p class="tracking-code" id="trackingCode">BR123456789CR</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Erro -->
+            <div class="card error-card hidden" id="errorCard">
+                <div class="card-content text-center">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Erro no Pagamento</h3>
+                    <p id="errorMessage">Ocorreu um erro ao processar o pagamento</p>
+                    <button class="retry-btn" id="retryBtn">Tentar Novamente</button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Pagamento processado com segurança</p>
+                <p>Correios - Conectando o Brasil</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <div>
+                <strong id="toastTitle">Código PIX copiado!</strong>
+                <p id="toastMessage">Cole no seu app de pagamento para finalizar a compra.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="pix-api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
